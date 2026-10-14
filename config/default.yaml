@@ -1,0 +1,59 @@
+# 未填写的字段使用内置默认值；未知字段会报错。启动不会发送动作或归零。
+http:
+  host: 127.0.0.1
+  port: 3000
+  token_env: EE_CONTROL_MCP_TOKEN
+  # 远程访问时添加客户端 URL 中的真实服务 IP/域名，保留端口通配符。
+  allowed_hosts: ["localhost:*", "127.0.0.1:*", "[::1]:*"]
+  allowed_origins: ["http://localhost:*", "http://127.0.0.1:*"]
+
+ros:
+  node_name: ee_control_mcp
+  # 当前机器人运行 Humble；本机也必须使用 Humble 和对应消息包/Python。
+  expected_distro: humble
+  command_topics:
+    left: /arm_master_l_cmd
+    right: /arm_master_r_cmd
+  feedback_topics:
+    left: /arm_slave_l_status
+    right: /arm_slave_r_status
+  camera_topics:
+    head: /camera/camera_h/color/image_rect_raw/compressed
+    left_wrist: /camera/camera_l/color/image_rect_raw/compressed
+    right_wrist: /camera/camera_r/color/image_rect_raw/compressed
+
+control:
+  publish_rate_hz: 30
+  default_speed: slow
+  speeds:
+    slow: {translation_m: 0.001, angle_rad: 0.005}
+    medium: {translation_m: 0.002, angle_rad: 0.010}
+    fast: {translation_m: 0.005, angle_rad: 0.025}
+  # 字符串命令未写 :value 时的距离/角度；不影响插值粒度。
+  delta_pos: 0.05
+  delta_rot: 0.1
+  # 默认前 +x、左 +y、上 +z。可覆盖任意动作的六维增量：
+  # motions:
+  #   left: [0, 0.05, 0, 0, 0, 0]
+  #   right: [0, -0.05, 0, 0, 0, 0]
+  gripper_open: 1.0
+  gripper_close: 0.0
+  # 仅控制内部使用：command = raw_feedback * scale + offset。
+  # state 中的夹爪反馈始终原样返回；按真实驱动单位校准这两个参数。
+  gripper_feedback_scale: 1.0
+  gripper_feedback_offset: 0.0
+  position_tolerance_m: 0.005
+  rotation_tolerance_rad: 0.05
+  joint_tolerance_rad: 0.02
+  gripper_tolerance: 0.05
+  settle_observations: 2
+  step_timeout_s: 60
+  max_pending_steps: 256
+  completed_history_size: 128
+
+observation:
+  feedback_max_age_s: 0.5
+  image_max_age_s: 1.0
+  image_quality: 85
+  image_max_width: 1024
+  image_max_height: 768

@@ -1,0 +1,23 @@
+# Robotics52 部署覆盖；未填写字段使用内置默认值。
+http:
+  host: 0.0.0.0
+  # 监听地址与 Host/Origin 白名单分别配置；允许直接用此机器的 IP 连接。
+  allowed_hosts: ["localhost:*", "127.0.0.1:*", "[::1]:*", "10.6.3.69:*"]
+  allowed_origins: ["http://localhost:*", "http://127.0.0.1:*", "http://10.6.3.69:*"]
+
+ros:
+  expected_distro: humble
+  # 现场 /arm_master_l、/arm_master_r 接收 master_*_cmd 并发布以下反馈。
+  # /arm_slave_*_status 在此机器没有发布者，不能作为当前控制臂的参考。
+  feedback_topics:
+    left: /arm_master_l_status
+    right: /arm_master_r_status
+
+control:
+  # 两臂实际 arm_end_type=2；RobotCmd.gripper 直接传给 setCatch。
+  # 新版夹爪负值张开，0 关闭，不能沿用仿真的 1/0。
+  gripper_open: -3.4
+  gripper_close: 0.0
+  # 空爪闭合实测约 -0.068/-0.058；全开约 -3.317/-3.296。
+  # 全开最大偏差约 0.104，加少量反馈余量，状态仍保留原始值。
+  gripper_tolerance: 0.12

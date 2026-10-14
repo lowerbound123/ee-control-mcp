@@ -1,0 +1,3 @@
+interface:
+  display_name: "通用双臂闭环操作"
+  short_description: "适用于实机与仿真的双臂任务，指导左右分工、并行、传递及多视角观察"

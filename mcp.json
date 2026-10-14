@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "ee-control-mcp": {
+      "url": "http://10.6.3.69:3000/mcp"
+    }
+  }
+}

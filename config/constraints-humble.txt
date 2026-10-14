@@ -1,0 +1,2 @@
+# Keep the Humble Python environment on NumPy 1.x.
+numpy>=1.24,<2
